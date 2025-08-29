@@ -4,238 +4,287 @@
   <meta charset="UTF-8">
   <title>Anti-Bullying Detection App</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f0f4f8;
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
     }
 
     .container {
       background: #fff;
       padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       max-width: 600px;
       width: 100%;
+      text-align: center;
+    }
+
+    .header {
+      margin-bottom: 25px;
     }
 
     h1 {
-      text-align: center;
-      color: #333;
+      color: #2c3e50;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #7f8c8d;
+      font-size: 16px;
       margin-bottom: 20px;
+    }
+
+    .input-area {
+      margin-bottom: 25px;
     }
 
     textarea {
       width: 100%;
-      height: 120px;
-      padding: 12px;
-      margin-top: 15px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
+      height: 150px;
+      padding: 15px;
+      border-radius: 12px;
+      border: 2px solid #ddd;
       font-size: 16px;
       resize: none;
+      transition: border-color 0.3s;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #3498db;
     }
 
     .button-container {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       margin-top: 20px;
-      gap: 10px;
     }
 
     button {
-      padding: 12px 20px;
+      padding: 14px 28px;
       font-size: 16px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s;
-      flex: 1;
+      transition: all 0.3s;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .check-btn {
-      background: #007bff;
+      background: #3498db;
       color: white;
+      box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
     }
+    
     .check-btn:hover {
-      background: #0056b3;
+      background: #2980b9;
+      transform: translateY(-2px);
     }
 
-    .warning-btn {
-      background: #ff9800;
-      color: white;
-    }
-    .warning-btn:hover {
-      background: #e68900;
+    .check-btn:active {
+      transform: translateY(0);
     }
 
     .report-btn {
-      background: #dc3545;
+      background: #e74c3c;
       color: white;
-      margin-top: 20px;
-      width: 100%;
+      margin-left: 15px;
+      box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
     }
+    
     .report-btn:hover {
-      background: #a71d2a;
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+
+    .warning-btn {
+      background: #f39c12;
+      color: white;
+      margin-left: 15px;
+      box-shadow: 0 4px 6px rgba(243, 156, 18, 0.3);
+    }
+    
+    .warning-btn:hover {
+      background: #d35400;
+      transform: translateY(-2px);
     }
 
     #results {
-      margin-top: 20px;
+      margin-top: 25px;
       font-size: 18px;
       font-weight: bold;
       text-align: center;
+      min-height: 70px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .safe {
-      color: green;
-    }
-    .warning {
-      color: red;
-    }
-
-    .warning-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
+      color: #27ae60;
+      padding: 15px;
+      background: rgba(39, 174, 96, 0.1);
+      border-radius: 10px;
       width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+    }
+    
+    .warning {
+      color: #e74c3c;
+      padding: 15px;
+      background: rgba(231, 76, 60, 0.1);
+      border-radius: 10px;
+      width: 100%;
     }
 
-    .modal-content {
-      background-color: white;
-      padding: 30px;
-      border-radius: 15px;
-      text-align: center;
-      max-width: 500px;
-      width: 80%;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+    .icon {
+      margin-right: 8px;
+      font-size: 18px;
     }
 
-    .modal-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .modal-buttons button {
-      flex: none;
-      width: 120px;
-    }
-
-    .stats {
-      margin-top: 20px;
+    .footer {
+      margin-top: 30px;
+      color: #95a5a6;
       font-size: 14px;
-      color: #666;
-      text-align: center;
+    }
+
+    .highlight {
+      background: #fffde7;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 500px) {
+      .button-container {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .report-btn, .warning-btn {
+        margin-left: 0;
+        margin-top: 10px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Anti-Bullying Detector</h1>
-    <textarea id="inputText" placeholder="Type your message here..."></textarea>
+    <div class="header">
+      <h1>Anti-Bullying Detector</h1>
+      <p class="subtitle">Check your message for bullying content. Be kind online!</p>
+    </div>
+    
+    <div class="input-area">
+      <textarea id="inputText" placeholder="Type or paste your message here..."></textarea>
+    </div>
     
     <div class="button-container">
-      <button class="check-btn" onclick="checkBullying()">Check Message</button>
-      <button class="warning-btn" onclick="showWarning()">⚠️ Warn User</button>
+      <button class="check-btn" onclick="checkBullying()">
+        <span class="icon">🔍</span>Check Message
+      </button>
     </div>
     
     <div id="results"></div>
     
-    <div class="stats">
-      <p>Warnings issued today: <span id="warningCount">0</span></p>
-    </div>
-  </div>
-
-  <div class="warning-modal" id="warningModal">
-    <div class="modal-content">
-      <h2>Issue Warning</h2>
-      <p>Are you sure you want to warn this user about their message? This will notify them that their content may be hurtful to others.</p>
-      <div class="modal-buttons">
-        <button class="check-btn" onclick="sendWarning()">Send Warning</button>
-        <button class="warning-btn" onclick="closeWarning()">Cancel</button>
-      </div>
+    <div class="footer">
+      <p>This tool checks for words like <span class="highlight">stupid</span>, <span class="highlight">idiot</span>, <span class="highlight">loser</span>, and other harmful language.</p>
     </div>
   </div>
 
   <script>
     // List of bullying keywords
-    const bullyingWords = ["stupid", "idiot", "loser", "ugly", "hate", "fat", "dumb", "kill", "worthless"];
-    let warningCount = 0;
+    const bullyingWords = ["stupid", "idiot", "loser", "ugly", "hate", "fat", "dumb", "kill", "worthless", "freak", "moron", "retard"];
 
     function checkBullying() {
       const text = document.getElementById("inputText").value.toLowerCase();
       const resultsBox = document.getElementById("results");
       resultsBox.innerHTML = ""; // clear old results
 
+      // Check if text is empty
+      if (text.trim() === "") {
+        resultsBox.innerHTML = "<p class='warning'>⚠️ Please enter a message to check</p>";
+        return;
+      }
+
       let bullyingFound = false;
+      let foundWords = [];
+      
       for (let word of bullyingWords) {
         if (text.includes(word)) {
           bullyingFound = true;
-          break;
+          foundWords.push(word);
         }
       }
 
       if (bullyingFound) {
-        resultsBox.innerHTML = "<p class='warning'>⚠️ Bullying detected! Please be kind.</p>";
+        resultsBox.innerHTML = `
+          <p class='warning'>⚠️ Bullying detected! Found harmful words: ${foundWords.join(', ')}</p>
+          <p style="margin-top: 10px; color: #7f8c8d;">Please reconsider your message</p>
+        `;
 
+        // Create buttons container
+        const buttonsDiv = document.createElement("div");
+        buttonsDiv.style.display = "flex";
+        buttonsDiv.style.gap = "15px";
+        buttonsDiv.style.marginTop = "20px";
+        buttonsDiv.style.justifyContent = "center";
+        buttonsDiv.style.flexWrap = "wrap";
+        
+        // Create warning button
+        const warningBtn = document.createElement("button");
+        warningBtn.innerHTML = '<span class="icon">⚠️</span>Warn User';
+        warningBtn.className = "warning-btn";
+        warningBtn.onclick = () => {
+          alert("A warning has been sent to the user about their inappropriate language.");
+          document.getElementById("inputText").value = "";
+          resultsBox.innerHTML = "<p class='safe'>✅ Warning sent successfully. Thank you for making the internet safer!</p>";
+        };
+        
         // Create report button
         const reportBtn = document.createElement("button");
-        reportBtn.innerText = "🚨 Report Bullying";
+        reportBtn.innerHTML = '<span class="icon">🚨</span>Report Bullying';
         reportBtn.className = "report-btn";
         reportBtn.onclick = () => {
-          alert("Bullying report has been sent to the school admin!");
-          // Reset the text area
+          alert("Bullying report has been sent to the platform administrators!");
           document.getElementById("inputText").value = "";
+          resultsBox.innerHTML = "<p class='safe'>✅ Report submitted successfully. Thank you for your action!</p>";
         };
-        resultsBox.appendChild(reportBtn);
+        
+        // Add buttons to container
+        buttonsDiv.appendChild(warningBtn);
+        buttonsDiv.appendChild(reportBtn);
+        
+        // Add container to results
+        resultsBox.appendChild(buttonsDiv);
 
       } else {
-        resultsBox.innerHTML = "<p class='safe'>✅ No bullying detected. Great job!</p>";
+        resultsBox.innerHTML = "<p class='safe'>✅ No bullying detected. Great job being kind!</p>";
       }
     }
-
-    function showWarning() {
-      const text = document.getElementById("inputText").value.trim();
-      if (text === "") {
-        alert("Please enter a message first.");
-        return;
+    
+    // Allow pressing Enter to check message
+    document.getElementById("inputText").addEventListener("keypress", function(e) {
+      if (e.key === "Enter" && e.ctrlKey) {
+        checkBullying();
       }
-      
-      document.getElementById("warningModal").style.display = "flex";
-    }
-
-    function closeWarning() {
-      document.getElementById("warningModal").style.display = "none";
-    }
-
-    function sendWarning() {
-      warningCount++;
-      document.getElementById("warningCount").textContent = warningCount;
-      
-      alert("Warning has been sent to the user. They've been notified that their message may be hurtful.");
-      document.getElementById("inputText").value = "";
-      closeWarning();
-    }
-
-    // Close modal if user clicks outside of it
-    window.onclick = function(event) {
-      const modal = document.getElementById("warningModal");
-      if (event.target === modal) {
-        closeWarning();
-      }
-    };
+    });
   </script>
 </body>
 </html>
