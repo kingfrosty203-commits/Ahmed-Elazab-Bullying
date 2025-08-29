@@ -4,67 +4,83 @@
   <meta charset="UTF-8">
   <title>Bullying Detection</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      padding: 20px;
+    }
 
-    .container { max-width: 600px; margin: 50px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; }
-    .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
-    .btn-analyze { background: #3498db; color: white; }
-    .btn-report { background: #e74c3c; color: white; margin-top: 10px; }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
 
-    .results { margin-top: 20px; }
+    .results {
+      margin-top: 15px;
+    }
 
-    /* Report Modal */
+    /* Report Modal Styles */
     .report-modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.7);
-        z-index: 2000;
-        align-items: center;
-        justify-content: center;
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
     }
+
     .report-content {
-        background: white;
-        color: black;
-        padding: 20px;
-        border-radius: 15px;
-        max-width: 400px;
-        width: 90%;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
-    .report-content h2 { margin-bottom: 15px; font-size: 1.3em; }
+
+    .report-content h2 {
+      margin-bottom: 10px;
+    }
+
     .report-content textarea {
-        width: 100%;
-        height: 120px;
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        margin-bottom: 15px;
-        resize: none;
+      width: 100%;
+      height: 120px;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
     }
+
     .report-actions {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
     }
+
     .report-btn {
-        flex: 1;
-        padding: 10px;
-        border: none;
-        border-radius: 10px;
-        font-weight: bold;
-        cursor: pointer;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
     }
+
     .report-btn-submit { background: #e74c3c; color: white; }
     .report-btn-cancel { background: #ccc; }
   </style>
 </head>
 <body>
-  <div class="container">
+
+  <div class="card">
     <h1>Bullying Detection</h1>
-    <textarea id="inputText" rows="5" placeholder="Type something to analyze..."></textarea><br><br>
-    <button class="btn btn-analyze" onclick="analyzeText()">Analyze</button>
-    <div class="results" id="results"></div>
+    <textarea id="inputText" rows="4" style="width:100%;" placeholder="Type a message..."></textarea>
+    <button onclick="checkBullying()">Check</button>
+    <div id="results" class="results"></div>
   </div>
 
   <!-- Report Modal -->
@@ -80,55 +96,54 @@
   </div>
 
   <script>
-    function analyzeText() {
-        const text = document.getElementById("inputText").value.toLowerCase();
-        let resultsContent = document.getElementById("results");
-        resultsContent.innerHTML = "";
+    // Simple bullying keywords for testing
+    const bullyingWords = ["stupid", "loser", "idiot", "hate you", "ugly"];
 
-        // Simple mock detection
-        if (text.includes("stupid") || text.includes("idiot") || text.includes("bully")) {
-            const alertDiv = document.createElement("div");
-            alertDiv.textContent = "⚠️ Bullying detected!";
-            alertDiv.style.color = "red";
-            resultsContent.appendChild(alertDiv);
+    function checkBullying() {
+      const text = document.getElementById("inputText").value.toLowerCase();
+      const resultsBox = document.getElementById("results");
+      resultsBox.innerHTML = ""; // clear old results
 
-            // Add report button
-            const reportButton = document.createElement("button");
-            reportButton.textContent = "📢 Report Incident";
-            reportButton.className = "btn btn-report";
-            reportButton.onclick = openReport;
-            resultsContent.appendChild(reportButton);
-        } else {
-            const safeDiv = document.createElement("div");
-            safeDiv.textContent = "✅ No bullying detected.";
-            safeDiv.style.color = "green";
-            resultsContent.appendChild(safeDiv);
-        }
+      let detected = bullyingWords.some(word => text.includes(word));
+
+      if (detected) {
+        const warning = document.createElement("p");
+        warning.textContent = "⚠️ Bullying detected! Please report this incident.";
+        resultsBox.appendChild(warning);
+
+        const reportButton = document.createElement("button");
+        reportButton.textContent = "📢 Report Incident";
+        reportButton.className = "report-btn";
+        reportButton.onclick = openReport;
+        resultsBox.appendChild(reportButton);
+      } else {
+        const safe = document.createElement("p");
+        safe.textContent = "✅ No bullying detected.";
+        resultsBox.appendChild(safe);
+      }
     }
 
-    // Open report modal
+    // Modal functions
     function openReport() {
-        document.getElementById('reportModal').style.display = 'flex';
+      document.getElementById('reportModal').style.display = 'flex';
     }
 
-    // Close report modal
     function closeReport() {
-        document.getElementById('reportModal').style.display = 'none';
+      document.getElementById('reportModal').style.display = 'none';
     }
 
-    // Submit report
     function submitReport() {
-        const text = document.getElementById('reportText').value.trim();
-        if (!text) {
-            alert("Please describe the incident before submitting.");
-            return;
-        }
-        
-        console.log("🚨 Bullying Report Submitted:", text);
-        alert("✅ Thank you! Your report has been submitted.");
-        
-        document.getElementById('reportText').value = '';
-        closeReport();
+      const text = document.getElementById('reportText').value.trim();
+      if (!text) {
+        alert("Please describe the incident before submitting.");
+        return;
+      }
+
+      console.log("🚨 Bullying Report Submitted:", text);
+      alert("✅ Thank you! Your report has been submitted.");
+
+      document.getElementById('reportText').value = '';
+      closeReport();
     }
   </script>
 </body>
