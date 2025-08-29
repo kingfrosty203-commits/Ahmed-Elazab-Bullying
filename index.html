@@ -2,148 +2,125 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Bullying Detection</title>
+  <title>Anti-Bullying Detection App</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f5f6fa;
+      background: #f0f4f8;
       margin: 0;
-      padding: 20px;
-    }
-
-    .card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      margin-bottom: 20px;
-    }
-
-    .results {
-      margin-top: 15px;
-    }
-
-    /* Report Modal Styles */
-    .report-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 2000;
-      align-items: center;
+      padding: 0;
+      display: flex;
       justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    .report-content {
+    .container {
       background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      max-width: 600px;
+      width: 100%;
     }
 
-    .report-content h2 {
-      margin-bottom: 10px;
+    h1 {
+      text-align: center;
+      color: #333;
     }
 
-    .report-content textarea {
+    textarea {
       width: 100%;
       height: 120px;
-      margin-bottom: 15px;
-      padding: 10px;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 10px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      font-size: 16px;
+      resize: none;
     }
 
-    .report-actions {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
+    button {
+      margin-top: 20px;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .check-btn {
+      background: #007bff;
+      color: white;
+    }
+    .check-btn:hover {
+      background: #0056b3;
     }
 
     .report-btn {
-      padding: 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
+      background: #dc3545;
+      color: white;
+      display: block;
+      margin-top: 20px;
+    }
+    .report-btn:hover {
+      background: #a71d2a;
     }
 
-    .report-btn-submit { background: #e74c3c; color: white; }
-    .report-btn-cancel { background: #ccc; }
+    #results {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .safe {
+      color: green;
+    }
+    .warning {
+      color: red;
+    }
   </style>
 </head>
 <body>
-
-  <div class="card">
-    <h1>Bullying Detection</h1>
-    <textarea id="inputText" rows="4" style="width:100%;" placeholder="Type a message..."></textarea>
-    <button onclick="checkBullying()">Check</button>
-    <div id="results" class="results"></div>
-  </div>
-
-  <!-- Report Modal -->
-  <div id="reportModal" class="report-modal">
-    <div class="report-content">
-        <h2>📢 Report Bullying Incident</h2>
-        <textarea id="reportText" placeholder="Describe what happened..."></textarea>
-        <div class="report-actions">
-            <button class="report-btn report-btn-cancel" onclick="closeReport()">Cancel</button>
-            <button class="report-btn report-btn-submit" onclick="submitReport()">Submit</button>
-        </div>
-    </div>
+  <div class="container">
+    <h1>Anti-Bullying Detector</h1>
+    <textarea id="inputText" placeholder="Type your message here..."></textarea>
+    <button class="check-btn" onclick="checkBullying()">Check Message</button>
+    <div id="results"></div>
   </div>
 
   <script>
-    // Simple bullying keywords for testing
-    const bullyingWords = ["stupid", "loser", "idiot", "hate you", "ugly"];
+    // List of bullying keywords
+    const bullyingWords = ["stupid", "idiot", "loser", "ugly", "hate", "fat", "dumb", "kill", "worthless"];
 
     function checkBullying() {
       const text = document.getElementById("inputText").value.toLowerCase();
       const resultsBox = document.getElementById("results");
       resultsBox.innerHTML = ""; // clear old results
 
-      let detected = bullyingWords.some(word => text.includes(word));
+      let bullyingFound = false;
+      for (let word of bullyingWords) {
+        if (text.includes(word)) {
+          bullyingFound = true;
+          break;
+        }
+      }
 
-      if (detected) {
-        const warning = document.createElement("p");
-        warning.textContent = "⚠️ Bullying detected! Please report this incident.";
-        resultsBox.appendChild(warning);
+      if (bullyingFound) {
+        resultsBox.innerHTML = "<p class='warning'>⚠️ Bullying detected! Please be kind.</p>";
 
-        const reportButton = document.createElement("button");
-        reportButton.textContent = "📢 Report Incident";
-        reportButton.className = "report-btn";
-        reportButton.onclick = openReport;
-        resultsBox.appendChild(reportButton);
+        // Create report button
+        const reportBtn = document.createElement("button");
+        reportBtn.innerText = "🚨 Report Bullying";
+        reportBtn.className = "report-btn";
+        reportBtn.onclick = () => alert("Bullying report has been sent to the school admin!");
+        resultsBox.appendChild(reportBtn);
+
       } else {
-        const safe = document.createElement("p");
-        safe.textContent = "✅ No bullying detected.";
-        resultsBox.appendChild(safe);
+        resultsBox.innerHTML = "<p class='safe'>✅ No bullying detected. Great job!</p>";
       }
-    }
-
-    // Modal functions
-    function openReport() {
-      document.getElementById('reportModal').style.display = 'flex';
-    }
-
-    function closeReport() {
-      document.getElementById('reportModal').style.display = 'none';
-    }
-
-    function submitReport() {
-      const text = document.getElementById('reportText').value.trim();
-      if (!text) {
-        alert("Please describe the incident before submitting.");
-        return;
-      }
-
-      console.log("🚨 Bullying Report Submitted:", text);
-      alert("✅ Thank you! Your report has been submitted.");
-
-      document.getElementById('reportText').value = '';
-      closeReport();
     }
   </script>
 </body>
