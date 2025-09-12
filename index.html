@@ -1,290 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Anti-Bullying Detection App</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🛡️ BullyGuard AI</title>
 
-    .container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      max-width: 600px;
-      width: 100%;
-      text-align: center;
-    }
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
-    .header {
-      margin-bottom: 25px;
-    }
-
-    h1 {
-      color: #2c3e50;
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      color: #7f8c8d;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .input-area {
-      margin-bottom: 25px;
-    }
-
-    textarea {
-      width: 100%;
-      height: 150px;
-      padding: 15px;
-      border-radius: 12px;
-      border: 2px solid #ddd;
-      font-size: 16px;
-      resize: none;
-      transition: border-color 0.3s;
-    }
-
-    textarea:focus {
-      outline: none;
-      border-color: #3498db;
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    button {
-      padding: 14px 28px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .check-btn {
-      background: #3498db;
-      color: white;
-      box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
-    }
-    
-    .check-btn:hover {
-      background: #2980b9;
-      transform: translateY(-2px);
-    }
-
-    .check-btn:active {
-      transform: translateY(0);
-    }
-
-    .report-btn {
-      background: #e74c3c;
-      color: white;
-      margin-left: 15px;
-      box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
-    }
-    
-    .report-btn:hover {
-      background: #c0392b;
-      transform: translateY(-2px);
-    }
-
-    .warning-btn {
-      background: #f39c12;
-      color: white;
-      margin-left: 15px;
-      box-shadow: 0 4px 6px rgba(243, 156, 18, 0.3);
-    }
-    
-    .warning-btn:hover {
-      background: #d35400;
-      transform: translateY(-2px);
-    }
-
-    #results {
-      margin-top: 25px;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-      min-height: 70px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .safe {
-      color: #27ae60;
-      padding: 15px;
-      background: rgba(39, 174, 96, 0.1);
-      border-radius: 10px;
-      width: 100%;
-    }
-    
-    .warning {
-      color: #e74c3c;
-      padding: 15px;
-      background: rgba(231, 76, 60, 0.1);
-      border-radius: 10px;
-      width: 100%;
-    }
-
-    .icon {
-      margin-right: 8px;
-      font-size: 18px;
-    }
-
-    .footer {
-      margin-top: 30px;
-      color: #95a5a6;
-      font-size: 14px;
-    }
-
-    .highlight {
-      background: #fffde7;
-      padding: 2px 4px;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-
-    @media (max-width: 500px) {
-      .button-container {
-        flex-direction: column;
-        gap: 12px;
-      }
-      
-      .report-btn, .warning-btn {
-        margin-left: 0;
-        margin-top: 10px;
-      }
-    }
-  </style>
+<style>
+/* (Keep your same CSS from before) */
+</style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Anti-Bullying Detector</h1>
-      <p class="subtitle">Check your message for bullying content. Be kind online!</p>
-    </div>
-    
-    <div class="input-area">
-      <textarea id="inputText" placeholder="Type or paste your message here..."></textarea>
-    </div>
-    
-    <div class="button-container">
-      <button class="check-btn" onclick="checkBullying()">
-        <span class="icon">🔍</span>Check Message
-      </button>
-    </div>
-    
-    <div id="results"></div>
-    
-    <div class="footer">
-      <p>This tool checks for words like <span class="highlight">stupid</span>, <span class="highlight">idiot</span>, <span class="highlight">loser</span>, and other harmful language.</p>
-    </div>
+<div class="container">
+  <div class="header">
+    <div class="title">🛡️ Anti-Bullying AI</div>
+    <div class="subtitle">Photo-based detection system</div>
   </div>
 
-  <script>
-    // List of bullying keywords
-    const bullyingWords = ["stupid", "idiot", "loser", "ugly", "hate", "fat", "dumb", "kill", "worthless", "freak", "moron", "retard"];
+  <div class="camera-section">
+    <div class="upload-area" id="upload-area">
+      <div class="upload-icon">📸</div>
+      <div class="upload-text">Tap to take photo or upload image</div>
+    </div>
+    <input type="file" id="file-input" accept="image/*">
+    <button class="btn btn-camera" onclick="document.getElementById('file-input').click()">📷 Upload Image</button>
+  </div>
 
-    function checkBullying() {
-      const text = document.getElementById("inputText").value.toLowerCase();
-      const resultsBox = document.getElementById("results");
-      resultsBox.innerHTML = ""; // clear old results
+  <div class="loading" id="loading" style="display:none;">
+    <div class="spinner"></div>
+    <div>🔍 Analyzing image...</div>
+  </div>
 
-      // Check if text is empty
-      if (text.trim() === "") {
-        resultsBox.innerHTML = "<p class='warning'>⚠️ Please enter a message to check</p>";
-        return;
-      }
+  <div class="results-section" id="results" style="display:none;">
+    <div class="results-title">📊 Detection Results</div>
+    <div id="results-content"></div>
+    <div id="report-section" style="display:none;">
+      <button class="btn btn-report" onclick="reportToParents()">📤 Send Report</button>
+    </div>
+  </div>
+</div>
 
-      let bullyingFound = false;
-      let foundWords = [];
-      
-      for (let word of bullyingWords) {
-        if (text.includes(word)) {
-          bullyingFound = true;
-          foundWords.push(word);
-        }
-      }
+<script>
+// ==== Teachable Machine Setup ====
+const URL = "https://teachablemachine.withgoogle.com/models/fJGp66m4p/";
+let model, maxPredictions;
 
-      if (bullyingFound) {
-        resultsBox.innerHTML = `
-          <p class='warning'>⚠️ Bullying detected! Found harmful words: ${foundWords.join(', ')}</p>
-          <p style="margin-top: 10px; color: #7f8c8d;">Please reconsider your message</p>
-        `;
+// Load the model
+async function init() {
+  const modelURL = URL + "model.json";
+  const metadataURL = URL + "metadata.json";
+  model = await tmImage.load(modelURL, metadataURL);
+  maxPredictions = model.getTotalClasses();
+}
+init();
 
-        // Create buttons container
-        const buttonsDiv = document.createElement("div");
-        buttonsDiv.style.display = "flex";
-        buttonsDiv.style.gap = "15px";
-        buttonsDiv.style.marginTop = "20px";
-        buttonsDiv.style.justifyContent = "center";
-        buttonsDiv.style.flexWrap = "wrap";
-        
-        // Create warning button
-        const warningBtn = document.createElement("button");
-        warningBtn.innerHTML = '<span class="icon">⚠️</span>Warn User';
-        warningBtn.className = "warning-btn";
-        warningBtn.onclick = () => {
-          alert("A warning has been sent to the user about their inappropriate language.");
-          document.getElementById("inputText").value = "";
-          resultsBox.innerHTML = "<p class='safe'>✅ Warning sent successfully. Thank you for making the internet safer!</p>";
-        };
-        
-        // Create report button
-        const reportBtn = document.createElement("button");
-        reportBtn.innerHTML = '<span class="icon">🚨</span>Report Bullying';
-        reportBtn.className = "report-btn";
-        reportBtn.onclick = () => {
-          alert("Bullying report has been sent to the platform administrators!");
-          document.getElementById("inputText").value = "";
-          resultsBox.innerHTML = "<p class='safe'>✅ Report submitted successfully. Thank you for your action!</p>";
-        };
-        
-        // Add buttons to container
-        buttonsDiv.appendChild(warningBtn);
-        buttonsDiv.appendChild(reportBtn);
-        
-        // Add container to results
-        resultsBox.appendChild(buttonsDiv);
+// Handle uploaded file
+document.getElementById("file-input").addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (file) analyzeImage(file);
+});
 
-      } else {
-        resultsBox.innerHTML = "<p class='safe'>✅ No bullying detected. Great job being kind!</p>";
-      }
-    }
-    
-    // Allow pressing Enter to check message
-    document.getElementById("inputText").addEventListener("keypress", function(e) {
-      if (e.key === "Enter" && e.ctrlKey) {
-        checkBullying();
-      }
-    });
-  </script>
+async function analyzeImage(file) {
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("results").style.display = "none";
+
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(file);
+  img.onload = async () => {
+    const prediction = await model.predict(img);
+    let top = prediction.sort((a,b)=>b.probability - a.probability)[0];
+    displayResult(top.className, top.probability);
+    document.getElementById("loading").style.display = "none";
+  };
+}
+
+function displayResult(label, prob) {
+  const results = document.getElementById("results");
+  const content = document.getElementById("results-content");
+  const report = document.getElementById("report-section");
+  results.style.display = "block";
+  content.innerHTML = "";
+
+  let div = document.createElement("div");
+  if (label.toLowerCase().includes("bully")) {
+    div.className = "result-item result-danger";
+    div.innerHTML = `🚨 Bullying Detected! (Confidence: ${(prob*100).toFixed(1)}%)`;
+    report.style.display = "block";
+  } else if (label.toLowerCase().includes("kind")) {
+    div.className = "result-item result-safe";
+    div.innerHTML = `😊 Kindness Detected! (Confidence: ${(prob*100).toFixed(1)}%)`;
+    report.style.display = "none";
+  } else {
+    div.className = "result-item";
+    div.innerHTML = "ℹ️ No clear bullying/kindness detected.";
+    report.style.display = "none";
+  }
+
+  content.appendChild(div);
+}
+
+// ==== Reporting ====
+function reportToParents() {
+  // Here you’d connect to backend (Node.js, Firebase, or EmailJS/Twilio)
+  alert("📤 Report sent to parents via SMS/Email.");
+}
+</script>
 </body>
 </html>
